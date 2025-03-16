@@ -1,25 +1,22 @@
 <template>
-  <div class="flex flex-col items-center justify-center gap-4 h-screen">
-    <h1 class="font-bold text-2xl text-(--ui-primary)">
-      Nuxt UI v3
-    </h1>
-
-    <div class="flex items-center gap-2">
-      <UButton
-        label="Documentation"
-        icon="i-lucide-square-play"
-        to="https://ui3.nuxt.dev/getting-started/installation/nuxt"
-        target="_blank"
-      />
-
-      <UButton
-        label="GitHub"
-        color="neutral"
-        variant="outline"
-        icon="i-simple-icons-github"
-        to="https://github.com/nuxt/ui"
-        target="_blank"
-      />
-    </div>
+  <div class="flex flex-col gap-4 h-screen">
+    <UProgress animation="swing" v-if="session.isPending" />
+    <template v-if="session.data">
+      <UButton loading-auto @click="signOut">Sign Out</UButton>
+    </template>
+    <pre>{{ session.data }}</pre>
+    <pre>{{ session.error }}</pre>
   </div>
 </template>
+
+
+<script setup lang="ts">
+import { authClient } from "~/lib/auth-client";
+
+const session = await authClient.useSession(useFetch)
+
+const signOut = async () => {
+  await authClient.signOut();
+  await navigateTo("/login");
+};
+</script>

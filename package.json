@@ -12,7 +12,9 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.30",
     "@iconify-json/simple-icons": "^1.2.28",
+    "@libsql/kysely-libsql": "^0.4.1",
     "@nuxt/ui": "^3.0.0",
+    "better-auth": "^1.2.4",
     "nuxt": "^3.16.0"
   },
   "devDependencies": {
