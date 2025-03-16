@@ -1,9 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 h-screen">
-    <UProgress animation="swing" v-if="session.isPending" />
-    <template v-if="session.data">
-      <UButton loading-auto @click="signOut">Sign Out</UButton>
-    </template>
+  <div class="flex flex-col gap-4">
     <pre>{{ session.data }}</pre>
     <pre>{{ session.error }}</pre>
   </div>
@@ -14,9 +10,4 @@
 import { authClient } from "~/lib/auth-client";
 
 const session = await authClient.useSession(useFetch)
-
-const signOut = async () => {
-  await authClient.signOut();
-  await navigateTo("/login");
-};
 </script>

@@ -38,6 +38,6 @@ const signIn = async (event: FormSubmitEvent<Schema>) => {
         password: password,
     })
 
-    navigateTo("/")
+    await navigateTo("/")
 };
 </script>

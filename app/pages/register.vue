@@ -89,8 +89,8 @@ const signUp = async (event: FormSubmitEvent<Schema>) => {
         motherCountry: motherCountry,
         spokenDialect: spokenDialect,
     });
+
+    await navigateTo("/")
 };
 
 </script>
-
-<style scoped></style>
