@@ -1,0 +1,21 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.30",
+    "@iconify-json/simple-icons": "^1.2.28",
+    "@nuxt/ui": "^3.0.0",
+    "nuxt": "^3.16.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
