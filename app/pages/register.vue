@@ -38,7 +38,6 @@
 <script setup lang="ts">
 import { z } from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { authClient } from "~/lib/auth-client";
 
 const schema = z.object({
     firstName: z.string(),
@@ -64,6 +63,7 @@ const state = ref({
     spokenDialect: "",
 })
 
+const { client } = useAuth()
 
 const signUp = async (event: FormSubmitEvent<Schema>) => {
     let firstName = event.data.firstName
@@ -75,10 +75,10 @@ const signUp = async (event: FormSubmitEvent<Schema>) => {
     let age = event.data.age
     let password = event.data.password
 
-    let motherCountry = event.data.motherCountry
-    let spokenDialect = event.data.spokenDialect
+    let motherCountry = event.data.motherCountry.toLowerCase()
+    let spokenDialect = event.data.spokenDialect.toLowerCase()
 
-    await authClient.signUp.email({
+    await client.signUp.email({
         firstName: firstName,
         lastName: lastName,
         name: name,

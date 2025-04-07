@@ -1,18 +1,18 @@
 <template>
     <div class="grid grid-rows-[auto_1fr] h-screen">
-        <nav class="flex p-2 shadow-sm justify-between items-center">
-            <h1 class="text-xl">
-                Qur'an crowdsourcing
-            </h1>
+        <nav class="flex items-center justify-between p-2 shadow-sm">
+            <UButton size="lg" to="/" icon="lucide:home" variant="outline" label="Qur'an Crowdsourcing" />
             <div class="flex items-center gap-2">
                 <ColorToggle />
-                <UProgress animation="swing" v-if="session.isPending" />
-                <template v-if="session.data.value">
-                    <UButton color="error" variant="subtle" loading-auto @click="signOut">Sign Out</UButton>
+                <template v-if="loggedIn">
+                    <UButton to="/profile" color="info" icon="lucide:user" variant="outline" label="Profile" />
+                    <UButton color="error" icon="lucide:log-out" variant="outline" loading-auto @click="signOut">Sign
+                        Out
+                    </UButton>
                 </template>
                 <template v-else>
-                    <UButton variant="subtle" @click="navigateTo('/login')">Login</UButton>
-                    <UButton variant="subtle" @click="navigateTo('/register')">Register</UButton>
+                    <UButton variant="outline" @click="navigateTo('/login')">Login</UButton>
+                    <UButton variant="outline" @click="navigateTo('/register')">Register</UButton>
                 </template>
             </div>
         </nav>
@@ -23,14 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { authClient } from "~/lib/auth-client";
-
-const session = await authClient.useSession(useFetch)
+const { loggedIn, client } = useAuth()
 
 const signOut = async () => {
-    await authClient.signOut();
+    await client.signOut();
     await navigateTo("/login");
 };
 </script>
-
-<style scoped></style>

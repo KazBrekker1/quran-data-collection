@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import { z } from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { authClient } from "~/lib/auth-client";
 
 const schema = z.object({
     email: z.string(),
@@ -30,10 +29,12 @@ const state = ref({
     password: "",
 })
 
+const { client } = useAuth()
+
 const signIn = async (event: FormSubmitEvent<Schema>) => {
     let { email, password } = event.data
 
-    await authClient.signIn.email({
+    await client.signIn.email({
         email: email,
         password: password,
     })

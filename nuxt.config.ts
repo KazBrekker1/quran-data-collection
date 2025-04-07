@@ -1,10 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
 
-  modules: [
-    '@nuxt/ui',
-  ],
+    timeline: {
+      enabled: true
+    }
+  },
+
+  modules: ['@nuxt/ui', '@vueuse/nuxt'],
 
   css: ['~/assets/css/main.css'],
 
