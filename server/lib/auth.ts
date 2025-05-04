@@ -10,6 +10,11 @@ const tursoDialect = new LibsqlDialect({
 })
 
 export const auth = betterAuth({
+    session: {
+        cookieCache: {
+            maxAge: 60 * 60 * 24 * 3,
+        }
+    },
     database: {
         dialect: tursoDialect,
         type: "sqlite" as const,

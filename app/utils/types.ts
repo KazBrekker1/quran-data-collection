@@ -7,7 +7,8 @@ export type SubmissionData = {
 }
 
 export type Prompt = {
-    id: string
+    id: number
+    sentence: string
     before: string
     target_letter: string
     after: string

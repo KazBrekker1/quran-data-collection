@@ -2,12 +2,18 @@
     <UButton v-if="!is_recording" @click="startRecording" icon="lucide:play" variant="subtle">
         Start Recording
     </UButton>
-    <UButton v-else @click="stopRecording" icon="lucide:square" color="error">
-        Stop Recording
-    </UButton>
+    <div v-else class="flex flex-col gap-2">
+        <UButton @click="stopRecording" icon="lucide:square" color="error" class="flex-1">
+            Stop Recording
+        </UButton>
+        <AVMedia :media="stream" type="frequ" frequ-direction="mo" :frequ-line-cap="true" :frequ-lnum="50"
+            line-color="gray" class="mx-auto w-34" :canv-height="64" />
+    </div>
 </template>
 
 <script lang="ts" setup>
+import { AVMedia } from 'vue-audio-visual'
+
 let is_recording = defineModel<boolean>("is_recording", { default: false });
 
 const stream = await navigator.mediaDevices.getUserMedia({
