@@ -3,7 +3,7 @@
         <UAlert v-if="viable_prompts.length === 0" title="No more prompts"
             description="You have submitted all the available prompts" color="success" variant="subtle" />
         <PromptInput v-else v-if="status === 'success'" :prompt="current_prompt" :key="current_prompt.id"
-            @handle-done-recording="handle_done_recording" @skip-prompt="skip_prompt" />
+            @skip-prompt="skip_prompt" />
         <UProgress v-if="status === 'pending'" animation="swing" />
     </main>
 </template>
@@ -13,7 +13,8 @@ import prompts from "~~/public/quran_prompts.json"
 
 const { user } = useAuth()
 
-const { data: previous_records, refresh, status } = useAsyncData(
+const { data: previous_records, status } = useAsyncData(
+    "previous_records",
     () => $fetch("/api/submissions", {
         query: {
             user_email: user.value?.email
@@ -43,23 +44,5 @@ const current_prompt = computed(() => {
 
 const skip_prompt = () => {
     current_prompt_index.value = Math.floor(Math.random() * viable_prompts.value.length)
-}
-
-const handle_done_recording = async (id: number, blob: Blob) => {
-    const user_email = user.value?.email
-    const prompt_id = current_prompt.value.id
-    const form = new FormData()
-
-    form.append("audio", blob)
-    form.append("user_email", user_email as string)
-    form.append("prompt_id", prompt_id.toString())
-
-    const response = await $fetch("/api/submission", {
-        method: "POST",
-        body: form
-    })
-
-    await refresh()
-    skip_prompt()
 }
 </script>

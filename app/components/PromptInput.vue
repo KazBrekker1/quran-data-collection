@@ -30,7 +30,7 @@
             <div class="flex gap-1">
                 <UButton size="xs" @click="delete_recording(index)" label="Delete" color="error" variant="subtle"
                     icon="lucide:trash" />
-                <UButton size="xs" @click="submit_recording(recording.id, recording.blob)" label="Submit"
+                <UButton size="xs" loading-auto @click="handle_done_recording(recording.blob)" label="Submit"
                     color="primary" icon="lucide:check" />
             </div>
         </div>
@@ -43,9 +43,10 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    "handle-done-recording": [number, Blob];
     "skip-prompt": [];
 }>();
+
+const { user } = useAuth()
 
 const is_recording = ref(false)
 const previous_recordings = ref<{ id: number, blob: Blob, prompt: Prompt, audio_url: string }[]>([])
@@ -62,8 +63,22 @@ const delete_recording = (index: number) => {
     }
 }
 
-const submit_recording = (id: number, blob: Blob) => {
-    emit("handle-done-recording", id, blob)
+const handle_done_recording = async (blob: Blob) => {
+    const user_email = user.value?.email
+    const prompt_id = props.prompt.id
+    const form = new FormData()
+
+    form.append("audio", blob)
+    form.append("user_email", user_email as string)
+    form.append("prompt_id", prompt_id.toString())
+
+    await $fetch("/api/submission", {
+        method: "POST",
+        body: form
+    })
+
+    await refreshNuxtData("previous_records")
+    skip_prompt()
 }
 
 const skip_prompt = () => {
