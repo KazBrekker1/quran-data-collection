@@ -35,12 +35,8 @@
             </UFormField>
         </div>
 
-        <UFormField label="Mother Country" name="motherCountry" required>
-            <UInput v-model="state.motherCountry" class="w-full" />
-        </UFormField>
-
-        <UFormField label="Spoken Dialect" name="spokenDialect" required>
-            <UInput v-model="state.spokenDialect" class="w-full" />
+        <UFormField label="Spoken Language" name="spokenLanguage" required>
+            <USelectMenu label-key="label" v-model="state.spokenLanguage" :items="dialectOptions" class="w-full" />
         </UFormField>
 
         <UFormField name="consent" required>
@@ -73,6 +69,19 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 const toast = useToast()
 const passwordType = ref<"password" | "text">("password")
 
+// Load and transform locales data with proper typing
+interface LocaleData {
+    [key: string]: [string, string]
+}
+
+const locales = await $fetch<LocaleData>('/locales.json', {
+    cache: 'force-cache',
+})
+const dialectOptions = Object.entries(locales).map(([code, [name]]) => ({
+    label: name,
+    value: code
+})).sort((a, b) => a.label.localeCompare(b.label))
+
 const schema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
@@ -80,8 +89,10 @@ const schema = z.object({
     password: z.string().min(8),
     gender: z.string(),
     age: z.number().min(10).max(100),
-    motherCountry: z.string().min(1),
-    spokenDialect: z.string().min(1),
+    spokenLanguage: z.object({
+        label: z.string(),
+        value: z.string(),
+    }),
     consent: z.boolean(),
 })
 
@@ -94,8 +105,10 @@ const state = ref({
     password: "",
     gender: "",
     age: 0,
-    motherCountry: "",
-    spokenDialect: "",
+    spokenLanguage: {
+        label: "",
+        value: "",
+    },
     consent: false,
 })
 
@@ -119,9 +132,8 @@ const signUp = async (event: FormSubmitEvent<Schema>) => {
     let gender = event.data.gender
     let age = event.data.age
     let password = event.data.password
-
-    let motherCountry = event.data.motherCountry.toLowerCase()
-    let spokenDialect = event.data.spokenDialect.toLowerCase()
+    let spokenLanguage = event.data.spokenLanguage.label
+    let spokenLanguageCode = event.data.spokenLanguage.value
 
     const response = await client.signUp.email({
         firstName: firstName,
@@ -131,8 +143,8 @@ const signUp = async (event: FormSubmitEvent<Schema>) => {
         email: email,
         gender: gender,
         password: password,
-        motherCountry: motherCountry,
-        spokenDialect: spokenDialect,
+        spokenLanguage: spokenLanguage,
+        spokenLanguageCode: spokenLanguageCode,
     });
 
     if (response.error) {

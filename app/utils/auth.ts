@@ -23,13 +23,13 @@ export const AuthAdditionalFields = {
         required: true,
         input: true,
     },
-    motherCountry: {
+    spokenLanguage: {
         type: "string",
         returned: true,
         required: true,
         input: true,
     },
-    spokenDialect: {
+    spokenLanguageCode: {
         type: "string",
         returned: true,
         required: true,

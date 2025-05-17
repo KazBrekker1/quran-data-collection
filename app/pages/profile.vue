@@ -14,19 +14,18 @@
             { label: 'Email', value: user.email },
             { label: 'Age', value: user.age },
             { label: 'Gender', value: user.gender },
-            { label: 'Mother Country', value: user.motherCountry },
-            { label: 'Spoken Dialect', value: user.spokenDialect },
+            { label: 'Spoken Language', value: user.spokenLanguage },
             { label: 'Account Created', value: formatDate(user.createdAt) }
         ]" :columns="[
-                { accessorKey: 'label', header: 'Field' },
-                { accessorKey: 'value', header: 'Value' }
-            ]" />
+            { accessorKey: 'label', header: 'Field' },
+            { accessorKey: 'value', header: 'Value' }
+        ]" />
 
     </UCard>
 </template>
 
 <script setup lang="ts">
-const { user, loading, loggedIn } = useAuth()
+const { user } = useAuth()
 
 function formatDate(dateInput: Date | string | undefined | null): string {
     if (!dateInput) return 'N/A';
