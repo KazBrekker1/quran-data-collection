@@ -64,23 +64,17 @@
 
 <script setup lang="ts">
 import { z } from "zod";
+import locales from '~~/public/locales.json'
+
 import type { FormSubmitEvent } from "@nuxt/ui";
 
 const toast = useToast()
 const passwordType = ref<"password" | "text">("password")
 
-// Load and transform locales data with proper typing
-interface LocaleData {
-    [key: string]: [string, string]
-}
-
-const locales = await $fetch<LocaleData>('/locales.json', {
-    cache: 'force-cache',
-})
 const dialectOptions = Object.entries(locales).map(([code, [name]]) => ({
     label: name,
     value: code
-})).sort((a, b) => a.label.localeCompare(b.label))
+})).sort((a, b) => a.label!.localeCompare(b.label!))
 
 const schema = z.object({
     firstName: z.string().min(1),
