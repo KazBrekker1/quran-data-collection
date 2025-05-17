@@ -1,17 +1,27 @@
 <template>
     <UForm :schema @submit.prevent="signIn" :state
-        class="w-full gap-5 bg-gray-50 p-12 rounded-lg shadow-md max-w-4xl mx-auto flex flex-col">
+        class="w-full gap-5 bg-primary-900/10 p-12 rounded-lg shadow-md max-w-4xl mx-auto flex flex-col">
         <h1 class="text-2xl font-bold mb-3">Login</h1>
 
-        <UFormField label="Email" name="email">
+        <UFormField label="Email" name="email" required>
             <UInput v-model="state.email" class="w-full" />
         </UFormField>
 
-        <UFormField label="Password" name="password">
-            <UInput type="password" v-model="state.password" class="w-full" />
+        <UFormField label="Password" name="password" required>
+            <div class="flex items-center gap-2 w-full">
+                <UInput v-model="state.password" class="w-full" :type="passwordType" />
+                <UButton @click="passwordType = passwordType === 'password' ? 'text' : 'password'" color="neutral"
+                    variant="ghost" :icon="passwordType === 'password' ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'" />
+            </div>
         </UFormField>
 
-        <UButton loading-auto type="submit" class="self-end">Sign In</UButton>
+        <USeparator orientation="horizontal" />
+        <div class="flex justify-between items-center">
+            <NuxtLink to="/register" class="text-sm text-primary-500 hover:underline">
+                Don't have an account? Sign up
+            </NuxtLink>
+            <UButton loading-auto type="submit">Sign In</UButton>
+        </div>
     </UForm>
 </template>
 
@@ -19,6 +29,8 @@
 <script setup lang="ts">
 import { z } from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
+
+const passwordType = ref<"password" | "text">("password")
 
 const schema = z.object({
     email: z.string().email(),
